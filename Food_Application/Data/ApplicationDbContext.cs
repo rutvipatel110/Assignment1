@@ -19,6 +19,7 @@ namespace Food_Application.Data
         public DbSet<Items> Items { get; set; }
         public DbSet<Order>    Orders { get; set; }
         public DbSet<OrderDetails> OrderDetails { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
 
 

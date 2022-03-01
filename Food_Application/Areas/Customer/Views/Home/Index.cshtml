@@ -1,5 +1,7 @@
 ﻿@using Food_Application.Models;
-@model List<Items>
+@using X.PagedList.Mvc.Core;
+@using X.PagedList.Mvc.Common;
+@model X.PagedList.IPagedList<Items>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -27,6 +29,11 @@
         </div>
     }
 </div>
+<div>
+    @Html.PagedListPager(Model,c=>Href("~/Customer/Home/Index?page="+c),PagedListRenderOptionsBase.PageNumbersOnly)
+</div>
+
+
 
 
 

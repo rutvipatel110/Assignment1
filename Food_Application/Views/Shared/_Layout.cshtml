@@ -3,12 +3,12 @@
 @using Microsoft.AspNetCore.Http;
 @inject IHttpContextAccessor HttpContextAccessor
 @{
-     int count = 0;
+    var userRole = HttpContextAccessor.HttpContext.Session.GetString("roleName");
+    int count = 0;
     List<Items> items = HttpContextAccessor.HttpContext.Session.Get<List<Items>>("items");
-    Items item = null;
-    if (items != null)
+    if (items == null)
     {
-        item = items.FirstOrDefault(c => c.Id == Model.Id);
+        items = new List<Items>();
     }
     count = items.Count();
 }
@@ -17,11 +17,12 @@
 
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] -Food Application</title>
+    <title>@ViewData["Title"] - OnlineShop</title>
+
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
@@ -46,40 +47,47 @@
             color:red;
         }
     </style>
-
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">Happy Meals</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">OnlineShop</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <partial name="_LoginPartial" />
-                    <ul class="navbar-nav flew-grow-1">
+                    <ul class="navbar-nav flex-grow-1">
+                        @if (userRole == "Super user")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="FoodItems" asp-action="Index">Food Items</a>
+
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="SpecialTag" asp-action="Index">Tag Name</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="Admin" asp-controller="Items" asp-action="Index">Product</a>
+                            </li>
+                        }
+   
                         <li class="nav-item">
-                            <a class="nav-link text-dark " asp-area="Admin" asp-controller="FoodItems" asp-action="Index">Food Items</a>
+                            <a class="nav-link text-dark" asp-area="Customer" asp-controller="Home" asp-action="Cart">
+                                <i class="fas fa-shopping-cart"></i>
+                                (@count)
+                            </a>
                         </li>
-                         <li class="nav-item">
-                            <a class="nav-link text-dark " asp-area="Admin" asp-controller="SpecialTag" asp-action="Index">Special Tag</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark " asp-area="Admin" asp-controller="Items" asp-action="Index">Items</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark " asp-area="Customer" asp-controller="Home" asp-action="Cart"><i class="fas fa-shopping-cart"></i>
-                                (@count)</a>
-                        </li>
+
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
     <div class="container">
+        <partial name="_CookieConsentPartial" />
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -87,11 +95,11 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2022 - Happy Meals - <a asp-area="" asp-page="/Privacy">Privacy</a>
+            &copy; 2019 - OnlineShop - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 
-     <environment include="Development">
+    <environment include="Development">
         @*<script src="https://code.jquery.com/jquery-3.3.1.js"></script>*@
         <script src="~/lib/jquery/dist/jquery.js"></script>
         <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
@@ -131,3 +139,4 @@
     @RenderSection("Scripts", required: false)
 </body>
 </html>
+

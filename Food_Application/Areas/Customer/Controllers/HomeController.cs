@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using X.PagedList;
 
 namespace Food_Application.Controllers
 {
@@ -14,14 +15,15 @@ namespace Food_Application.Controllers
     public class HomeController : Controller
     {
         
-        private ApplicationDbContext _dbContext;
-        public HomeController(ApplicationDbContext dbContext)
+        private  ApplicationDbContext _dbContext;
+        public HomeController(ApplicationDbContext dbContext )
         {
-            dbContext = _dbContext;
+            _dbContext = dbContext;
         }
-       public IActionResult Index()
+
+        public IActionResult Index(int? page)
         {
-            return View(_dbContext.Items.Include(c=>c.FoodItems).Include(c=>c.SpecialTag).ToList());
+            return View(_dbContext.Items.Include(c => c.FoodItems).Include(c => c.SpecialTag).ToList().ToPagedList(page ?? 1, 9));
         }
 
         public IActionResult Privacy()

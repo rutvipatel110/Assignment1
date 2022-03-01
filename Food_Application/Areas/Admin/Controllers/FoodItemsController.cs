@@ -3,10 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System.Threading.Tasks;
 using Food_Application.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Food_Application.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class FoodItemsController : Controller
     {
         private ApplicationDbContext _dbContext;
@@ -15,12 +17,14 @@ namespace Food_Application.Areas.Admin.Controllers
             _dbContext = dbContext;
 
         }
+        [AllowAnonymous]
         public IActionResult Index()
         {
             //var data = _dbContext.FoodItems.ToList()
             return View(_dbContext.FoodItems.ToList());
         }
         //Create Get Action Method
+        
         public ActionResult Create()
         {
             return View();
@@ -41,6 +45,7 @@ namespace Food_Application.Areas.Admin.Controllers
         }
 
         //Edit Get Action Method
+        
         public ActionResult Edit(int? id)
         {
             if(id== null)
